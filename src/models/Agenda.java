@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Agenda {
@@ -113,18 +112,16 @@ public class Agenda {
     public List<Appointment> filterAppointments(String person, LocalDate date) {
         List<Appointment> filteredAppointments = new ArrayList<>();
         for (Appointment appointment : appointments) {
-            if (person == null && date != null && appointment.getDate().equals(date)) {
-                filteredAppointments.add(appointment);
-            } else if (person != null && date == null && appointment.getPerson().contains(person)) {
-                filteredAppointments.add(appointment);
-            } else if (person != null && date != null && appointment.getPerson().contains(person) && appointment.getDate().equals(date)) {
+            boolean isDateMatch = (date == null || appointment.getDate().equals(date));
+            boolean isPersonMatch = (person == null || appointment.getPerson().contains(person));
+            if (isDateMatch && isPersonMatch) {
                 filteredAppointments.add(appointment);
             }
         }
     
         return filteredAppointments;
     }
-
+    
     /**
      * Ordina gli appuntamenti in ordine alfabetico
      * @return
