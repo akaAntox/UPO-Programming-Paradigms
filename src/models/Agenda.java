@@ -2,50 +2,62 @@ package models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Agenda {
-    private String name;
-    private List<Appointment> appointments;
+    private String name; // nome agenda
+    private List<Appointment> appointments; // lista di appuntamenti
 
+    /**
+     * Costruttore
+     * @param name
+     */
     public Agenda(String name) {
         this.name = name;
         this.appointments = new ArrayList<>();
     }
 
-    public Boolean addAppointment(LocalDate date, LocalTime time, int duration, String name, String location) {
+    /**
+     * Aggiunge un appuntamento
+     * @param date
+     * @param time
+     * @param duration
+     * @param name
+     * @param location
+     * @return
+     */
+    public Boolean addAppointment(LocalDate date, LocalTime time, Integer duration, String name, String location) {
         if (date == null || time == null || duration <= 0 || name == null || location == null 
-            || name.matches("[a-zA-Z]+") || location.matches("^[a-zA-Z0-9]*$"))
+                || !name.matches("^[a-zA-Z ]+$") || !location.matches("^[a-zA-Z0-9 ]+$"))
             throw new IllegalArgumentException("Parametri non validi");
 
-        try {
-            Appointment newAppointment = new Appointment(date, time, duration, name, location);
-            LocalTime newEndTime = time.plusMinutes(duration);
-    
-            for (Appointment appointment : appointments) {
-                if (date.equals(appointment.getDate())) {
-                    LocalTime startTime = appointment.getTime();
-                    LocalTime endTime = startTime.plusMinutes(appointment.getDuration());
-    
-                    if ((time.equals(startTime) || time.isAfter(startTime)) && time.isBefore(endTime)
-                            || (newEndTime.isAfter(startTime) && newEndTime.isBefore(endTime) || newEndTime.equals(startTime))) {
-                        System.out.println("Hai già un appuntamento a quell'ora.");
-                        return false;
-                    }
+        LocalTime newEndTime = time.plusMinutes(duration);
+
+        for (Appointment appointment : appointments) {
+            if (date.equals(appointment.getDate())) {
+                LocalTime startTime = appointment.getTime();
+                LocalTime endTime = startTime.plusMinutes(appointment.getDuration());
+
+                if ((time.equals(startTime) || time.isAfter(startTime)) && time.isBefore(endTime)
+                        || (newEndTime.isAfter(startTime) && newEndTime.isBefore(endTime) || newEndTime.equals(startTime))) {
+                    System.out.println("Hai già un appuntamento a quell'ora.");
+                    return false;
                 }
             }
-    
-            appointments.add(newAppointment);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
         
+        Appointment newAppointment = new Appointment(date, time, duration, name, location);
+        appointments.add(newAppointment);
         return true;
     }
 
+    /**
+     * Rimuove un appuntamento
+     * @param appointment
+     */
     public void removeAppointment(Appointment appointment) {
         if (appointment == null)
             throw new IllegalArgumentException("Appuntamento non valido");
@@ -53,6 +65,11 @@ public class Agenda {
         appointments.remove(appointment);
     }
 
+    /**
+     * Modifica un appuntamento
+     * @param oldAppointment
+     * @param newAppointment
+     */
     public void modifyAppointment(Appointment oldAppointment, Appointment newAppointment) {
         if (oldAppointment == null || newAppointment == null)
             throw new IllegalArgumentException("Parametri non validi");
@@ -63,6 +80,11 @@ public class Agenda {
         }
     }
 
+    /**
+     * Controlla se un appuntamento è presente
+     * @param appointment
+     * @return
+     */
     public Boolean containsAppointment(Appointment appointment) {
         if (appointment == null)
             throw new IllegalArgumentException("Appuntamento non valido");
@@ -70,6 +92,11 @@ public class Agenda {
         return appointments.contains(appointment);
     }
 
+    /**
+     * Restituisce l'appuntamento nella posizione indicata
+     * @param index
+     * @return
+     */
     public Appointment getAppointment(int index) {
         if (index < 0 || index >= appointments.size())
             throw new IllegalArgumentException("Indice non valido");
@@ -77,33 +104,79 @@ public class Agenda {
         return appointments.get(index);
     }
 
+    /**
+     * Filtra gli appuntamenti per persona e/o data
+     * @param person
+     * @param date
+     * @return
+     */
     public List<Appointment> filterAppointments(String person, LocalDate date) {
         List<Appointment> filteredAppointments = new ArrayList<>();
         for (Appointment appointment : appointments) {
-            if (appointment.getPerson().equals(person) && appointment.getDate().equals(date) ||
-                    appointment.getPerson().equals(person) && date == null ||
-                    appointment.getDate().equals(date) && person == null) {
+            if (person == null && date != null && appointment.getDate().equals(date)) {
+                filteredAppointments.add(appointment);
+            } else if (person != null && date == null && appointment.getPerson().contains(person)) {
+                filteredAppointments.add(appointment);
+            } else if (person != null && date != null && appointment.getPerson().contains(person) && appointment.getDate().equals(date)) {
                 filteredAppointments.add(appointment);
             }
         }
+    
         return filteredAppointments;
     }
 
+    /**
+     * Ordina gli appuntamenti in ordine alfabetico
+     * @return
+     */
     public List<Appointment> sortAppointments() {
-        Collections.sort(appointments);
+        appointments.sort((a1, a2) -> a1.getPerson().compareTo(a2.getPerson()));
         return appointments;
     }
 
+    /**
+     * Stampa tutti gli appuntamenti
+     * @param appointments
+     */
     public void listAppointments() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        appointments.sort((a1, a2) -> a1.getPerson().compareTo(a2.getPerson()));
+        
         for (Appointment appointment : appointments) {
-            System.out.println("\t" + appointment);
+            System.out.println("- " + appointment.getDate().format(dateFormatter) + " " + appointment.getTime()
+                    + " | Durata: " + appointment.getDuration() + " | Persona: " + appointment.getPerson() 
+                    + " | Luogo: " + appointment.getLocation());
         }
     }
 
+    /**
+     * Stampa gli appuntamenti specificando gli appuntamenti da stampare
+     * @param appointmentsToList
+     */
+    public void listAppointments(List<Appointment> appointmentsToList) {
+        if (appointmentsToList == null || appointmentsToList.isEmpty())
+            throw new IllegalArgumentException("Parametro non valido");
+        
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (Appointment appointment : appointmentsToList) {
+            System.out.println("- " + appointment.getDate().format(dateFormatter) + " " + appointment.getTime()
+                    + " | Durata: " + appointment.getDuration() + " | Persona: " + appointment.getPerson() 
+                    + " | Luogo: " + appointment.getLocation());
+        }
+    }
+
+    /**
+     * Restituisce gli appuntamenti
+     * @return
+     */
     public List<Appointment> getAppointments() {
         return appointments;
     }
 
+    /**
+     * Imposta gli appuntamenti
+     * @param appointments
+     */
     public void setAppointments(List<Appointment> appointments) {
         if (appointments == null)
             throw new IllegalArgumentException("Parametro non valido");
@@ -111,6 +184,10 @@ public class Agenda {
         this.appointments = appointments;
     }
 
+    /**
+     * Restituisce il nome
+     * @return
+     */
     public String getName() {
         return name;
     }

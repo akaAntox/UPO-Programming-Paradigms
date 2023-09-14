@@ -9,6 +9,14 @@ public class Appointment implements Comparable<Appointment> {
     private String person; // nome della persona con cui si ha l’appuntamento
     private String location; // luogo in cui si terrà l’appuntamento
 
+    /**
+     * Costruttore
+     * @param date
+     * @param time
+     * @param duration
+     * @param person
+     * @param location
+     */
     public Appointment(LocalDate date, LocalTime time, int duration, String person, String location) {
         this.date = date;
         this.time = time;
@@ -17,60 +25,106 @@ public class Appointment implements Comparable<Appointment> {
         this.location = location;
     }
         
+    /**
+     * Confronta due appuntamenti per data e ora
+     * @param  otherAppointment l'appuntamento con cui eseguire il confronto
+     * @return -1 se l'appuntamento è antecedente,
+     *         1 se l'appuntamento è successivo,
+     *         0 se gli appuntamenti sono uguali
+     */
     @Override
-    public int compareTo(Appointment other) {
-        if (this.date.isBefore(other.date)) {
+    public int compareTo(Appointment otherAppointment) {
+        if (this.date.isBefore(otherAppointment.date)) {
             return -1;
-        } else if (this.date.isAfter(other.date)) {
+        } else if (this.date.isAfter(otherAppointment.date)) {
             return 1;
         } else {
-            // le date sono uguali, confrontiamo gli orari
-            if (this.time.isBefore(other.time)) {
+            if (this.time.isBefore(otherAppointment.time)) {
                 return -1;
-            } else if (this.time.isAfter(other.time)) {
+            } else if (this.time.isAfter(otherAppointment.time)) {
                 return 1;
             } else {
-                return 0; // data e ora sono entrambi uguali
+                return 0;
             }
         }
     }
 
+    /**
+     * Restituisce la data
+     * @return data
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * Modifica la data
+     * @param date
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
+    /**
+     * Restituisce l'orario
+     * @return
+     */
     public LocalTime getTime() {
         return time;
     }
 
+    /**
+     * Modifica l'orario
+     * @param time
+     */
     public void setTime(LocalTime time) {
         this.time = time;
     }
 
+    /**
+     * Restituisce la durata
+     * @return
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * Modifica la durata
+     * @param duration
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    /**
+     * Restituisce il nome
+     * @return
+     */
     public String getPerson() {
         return person;
     }
 
+    /**
+     * Modifica il nome
+     * @param person
+     */
     public void setPerson(String person) {
         this.person = person;
     }
 
+    /**
+     * Restituisce il luogo
+     * @return
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * Modifica il luogo
+     * @param location
+     */
     public void setLocation(String location) {
         this.location = location;
     }
