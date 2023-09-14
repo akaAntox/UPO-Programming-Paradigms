@@ -26,7 +26,7 @@ public class Agenda {
      * @param duration
      * @param name
      * @param location
-     * @return
+     * @return successo o fallimento
      */
     public Boolean addAppointment(LocalDate date, LocalTime time, Integer duration, String name, String location) {
         if (date == null || time == null || duration <= 0 || name == null || location == null 
@@ -82,7 +82,7 @@ public class Agenda {
     /**
      * Controlla se un appuntamento è presente
      * @param appointment
-     * @return
+     * @return true se presente, false altrimenti
      */
     public Boolean containsAppointment(Appointment appointment) {
         if (appointment == null)
@@ -94,7 +94,7 @@ public class Agenda {
     /**
      * Restituisce l'appuntamento nella posizione indicata
      * @param index
-     * @return
+     * @return appuntamento
      */
     public Appointment getAppointment(int index) {
         if (index < 0 || index >= appointments.size())
@@ -107,7 +107,7 @@ public class Agenda {
      * Filtra gli appuntamenti per persona e/o data
      * @param person
      * @param date
-     * @return
+     * @return lista di appuntamenti
      */
     public List<Appointment> filterAppointments(String person, LocalDate date) {
         List<Appointment> filteredAppointments = new ArrayList<>();
@@ -124,7 +124,7 @@ public class Agenda {
     
     /**
      * Ordina gli appuntamenti in ordine alfabetico
-     * @return
+     * @return lista di appuntamenti ordinata
      */
     public List<Appointment> sortAppointments() {
         appointments.sort((a1, a2) -> a1.getPerson().compareTo(a2.getPerson()));
@@ -164,7 +164,7 @@ public class Agenda {
 
     /**
      * Restituisce gli appuntamenti
-     * @return
+     * @return lista di appuntamenti
      */
     public List<Appointment> getAppointments() {
         return appointments;
@@ -183,7 +183,7 @@ public class Agenda {
 
     /**
      * Restituisce il nome
-     * @return
+     * @return nome dell'agenda
      */
     public String getName() {
         return name;

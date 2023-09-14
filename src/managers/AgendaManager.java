@@ -29,7 +29,7 @@ public class AgendaManager {
     /**
      * Crea una nuova agenda
      * @param name
-     * @return
+     * @return agenda creata
      */
     public Agenda createAgenda(String name) {
         if (name == null)
@@ -48,7 +48,7 @@ public class AgendaManager {
     /**
      * Elimina un'agenda
      * @param name
-     * @return
+     * @return il valore precedente associato al nome
      */
     public Agenda deleteAgenda(String name) {
         if (name == null)
@@ -140,7 +140,7 @@ public class AgendaManager {
 
     /**
      * Restituisce tutte le agende
-     * @return
+     * @return Set di agende
      */
     public Set<String> listAgendas() {
         return agendas.keySet();
@@ -149,7 +149,7 @@ public class AgendaManager {
     /**
      * Restituisce un'agenda
      * @param name
-     * @return
+     * @return agenda trovata
      */
     public Agenda getAgendaByName(String name) {
         if (name == null)

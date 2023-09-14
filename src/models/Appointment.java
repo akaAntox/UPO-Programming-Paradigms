@@ -24,7 +24,7 @@ public class Appointment implements Comparable<Appointment> {
         this.person = person;
         this.location = location;
     }
-        
+    
     /**
      * Confronta due appuntamenti per data e ora
      * @param  otherAppointment l'appuntamento con cui eseguire il confronto
@@ -67,7 +67,7 @@ public class Appointment implements Comparable<Appointment> {
 
     /**
      * Restituisce l'orario
-     * @return
+     * @return ora
      */
     public LocalTime getTime() {
         return time;
@@ -83,7 +83,7 @@ public class Appointment implements Comparable<Appointment> {
 
     /**
      * Restituisce la durata
-     * @return
+     * @return durata
      */
     public int getDuration() {
         return duration;
@@ -99,7 +99,7 @@ public class Appointment implements Comparable<Appointment> {
 
     /**
      * Restituisce il nome
-     * @return
+     * @return nome
      */
     public String getPerson() {
         return person;
@@ -115,7 +115,7 @@ public class Appointment implements Comparable<Appointment> {
 
     /**
      * Restituisce il luogo
-     * @return
+     * @return luogo
      */
     public String getLocation() {
         return location;
